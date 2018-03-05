@@ -23007,7 +23007,7 @@
     if (codeGen) {
       return d + "";
     }
-    stringRepresentation = "" + parseFloat(d.toPrecision(6));
+    stringRepresentation = "" + parseFloat(d.toFixed(6));
     if (stringRepresentation.indexOf(".") === -1) {
       stringRepresentation += ".0";
     }
