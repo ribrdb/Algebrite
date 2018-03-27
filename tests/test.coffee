@@ -148,42 +148,6 @@ test_test = ->
 		"1",
 
 		"x + x > x",
-		"testgt(2*x,x)",
-
-		"a > x",
-		"testgt(a,x)",
-
-		"a >= x",
-		"testge(a,x)",
-
-		"a == x",
-		"testeq(a,x)",
-
-		"a < x",
-		"testlt(a,x)",
-
-		"a <= x",
-		"testle(a,x)",
-
-		# clean up -----------------
-
-		"a=quote(a)",
-		"",
-
-		"x=quote(x)",
-		"",
-
-		"b=quote(b)",
-		"",
-
-		"A=quote(A)",
-		"",
-
-		"B=quote(B)",
-		"",
-
-		"C=quote(C)",
-		"",
-
+		"Stop: relational operator: cannot determine due to non-numerical comparison of x",
 	]
 

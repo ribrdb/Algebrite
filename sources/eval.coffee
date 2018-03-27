@@ -654,20 +654,14 @@ Eval_noexpand = ->
 	Eval()
 	expanding = prev_expanding
 
-# like Eval() except "=" (assignment) is treated
-# as "==" (equality test)
+# like Eval() except "=" is Evaluated as "=="
 
 Eval_predicate = ->
 	save()
-	p1 = top()
+	p1 = pop()
 	if (car(p1) == symbol(SETQ))
-		# replace the assignment in the
-		# head with an equality test
-		pop()
-		push_symbol(TESTEQ)
-		push cadr(p1)
-		push caddr(p1)
-		list 3
-
-	Eval()
+		Eval_testeq()
+	else
+		push(p1)
+		Eval()
 	restore()

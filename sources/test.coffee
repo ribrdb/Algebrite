@@ -41,14 +41,17 @@ Eval_test = ->
 	# catch-all case, so we return zero.
 	push_integer 0
 
-# we test A==B by first subtracting and checking if we symbolically
-# get zero. If not, we evaluate to float and check if we get a zero.
-# If we get another NUMBER then we know they are different.
-# If we get something else, then we don't know and we return the
-# unaveluated test, which is the same as saying "maybe".
+# The test for equality is weaker than the other relational operators.
+
+# For example, A<=B causes a stop when the result of A minus B is not a
+# numerical value.
+
+# However, A==B never causes a stop.
+
+# For A==B, any nonzero result for A minus B indicates inequality.
+
 Eval_testeq = ->
 	# first try without simplifyng both sides
-	orig = p1
 	push(cadr(p1))
 	Eval()
 	push(caddr(p1))
@@ -70,79 +73,33 @@ Eval_testeq = ->
 		simplify()
 		subtract()
 		p1 = pop()
-
 		if (iszero(p1))
-			# if we get symbolically to a zero
-			# then we have perfect equivalence.
 			push_integer(1)
 		else
-			# let's try to evaluate to a float
-			push p1
-			yyfloat()
-			p1 = pop()
-			if (iszero(p1))
-				# if we got to zero then fine
-				push_integer(1)
-			else if isnum(p1)
-				# if we got to any other number then
-				# we know they are different
-				push_integer(0)
-			else
-				# if we didn't get to a number then we
-				# don't know whether the quantities are
-				# different so do nothing
-				push orig
+			push_integer(0)
 
 # Relational operators expect a numeric result for operand difference.
 
 Eval_testge = ->
-	orig = p1
-	comparison = cmp_args()
-
-	if !comparison?
-		push orig
-		return
-
-	if ( comparison >= 0)
+	if (cmp_args() >= 0)
 		push_integer(1)
 	else
 		push_integer(0)
 
 Eval_testgt = ->
-	orig = p1
-	comparison = cmp_args()
-
-	if !comparison?
-		push orig
-		return
-
-	if ( comparison > 0)
+	if (cmp_args() > 0)
 		push_integer(1)
 	else
 		push_integer(0)
 
 Eval_testle = ->
-	orig = p1
-	comparison = cmp_args()
-
-	if !comparison?
-		push orig
-		return
-
-	if ( comparison <= 0)
+	if (cmp_args() <= 0)
 		push_integer(1)
 	else
 		push_integer(0)
 
 Eval_testlt = ->
-	orig = p1
-	comparison = cmp_args()
-
-	if !comparison?
-		push orig
-		return
-
-	if ( comparison < 0)
+	if (cmp_args() < 0)
 		push_integer(1)
 	else
 		push_integer(0)
@@ -240,7 +197,8 @@ cmp_args = ->
 			else
 				t = 1
 		else
-			t = null
+			stop("relational operator: cannot determine due to non-numerical comparison of " + p1)
+			t = 0
 
 	return t
 
