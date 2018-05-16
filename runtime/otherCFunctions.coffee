@@ -17,24 +17,8 @@ strcmp = (str1, str2) ->
 
 doubleToReasonableString = (d) ->
 
-	# when generating code, print out
-	# with the maximum possible precision
-	if codeGen
-		return d + ""
-
-	# remove trailing zeroes beyond decimal point and
-	# gives at most 6 digits after the point
-	# see "Remove insignificant trailing zeros from a number?"
-	# here: https://stackoverflow.com/a/19623253
-	stringRepresentation = "" + parseFloat(d.toFixed(6))
-
-	# we actually want to give a hint to user that
-	# it's a double, so add a trailing ".0" if there
-	# is no decimal point
-	if stringRepresentation.indexOf(".") == -1 
-		stringRepresentation += ".0"
-
-	return stringRepresentation
+	# print out with the maximum possible precision
+	return d + ""
 
 # does nothing
 clear_term = ->
